@@ -1,3 +1,4 @@
+using Unity.Hierarchy;
 using UnityEngine;
 
 public class Rat : MonoBehaviour
@@ -18,24 +19,47 @@ public class Rat : MonoBehaviour
     // ------------------------------------------------------------------------
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // STEP 2 -------------------------------------------------------------
-        // If the Rat collides with a GameObject with the "Attack" tag,
-        //      call SpawnSmallRat() _spawnAmount number of times to spawn
-        //      more rats. (The spawning logic is written for you.)
-        //
-        // Also, shrink the original Rat by _shrinkAmount amount.
-        //
-        // STEP 3
-        // Additionally, call SpawnExplosion(), and pass in a different color
-        //      every time.
-        // SPECIFICALLY, go through the colors in the array named _colors
-        //      IN ORDER.
-        // Each time the Rat is kicked, the explosion should be a different
-        //      color: first yellow, then red, then blue, then looping back
-        //      around to yellow, etc.
+       string tag = collision.gameObject.tag;
+
+        if (tag.Equals("Attack"))
+        {
+            for (int i = 0; i < _spawnAmount; i++)
+
+                SpawnSmallRat();
+
+            SpawnExplosion(_colors[_colorIndex]);
+            _colorIndex++;
+
+            if (_colorIndex == 3)
+            {
+                _colorIndex = 0;
+            }
+
+            transform.localScale *= _shrinkAmount;
+        }
+
+        
 
 
-        // STEP 2 -------------------------------------------------------------
+        
+            // STEP 2 -------------------------------------------------------------
+            // If the Rat collides with a GameObject with the "Attack" tag,
+            //      call SpawnSmallRat() _spawnAmount number of times to spawn
+            //      more rats. (The spawning logic is written for you.)
+            //
+            // Also, shrink the original Rat by _shrinkAmount amount.
+            //
+            // STEP 3
+            // Additionally, call SpawnExplosion(), and pass in a different color
+            //      every time.
+            // SPECIFICALLY, go through the colors in the array named _colors
+            //      IN ORDER.
+            // Each time the Rat is kicked, the explosion should be a different
+            //      color: first yellow, then red, then blue, then looping back
+            //      around to yellow, etc.
+
+
+            // STEP 2 -------------------------------------------------------------
     }
 
     // ------------------------------------------------------------------------
@@ -50,19 +74,19 @@ public class Rat : MonoBehaviour
     // ------------------------------------------------------------------------
     private void SpawnSmallRat()
     {
-        GameObject rat = Instantiate(_ratPrefab);
+        GameObject rat = Instantiate(_ratPrefab, transform.position, Quaternion.identity);
 
         Vector3 pos = Random.onUnitSphere;
         rat.transform.position += pos;
-
+        
         // STEP 3 -------------------------------------------------------------
         // Uncomment and fix the below lines to give the small rat a random
         //      rotation correctly.
-        // Your game should look exaclty like the finished example.
+        // Your game should look exactly like the finished example.
 
-        //float randomAngle = Random.Range(0, 360);
-        //Vector3 rotationAngles = new Vector3(0, randomAngle, 0);
-        //rat.transform.Rotate(rotationAngles);
+        float randomAngle = Random.Range(0, 360);
+       Vector3 rotationAngles = new Vector3(randomAngle, 0, 0);
+       rat.transform.Rotate(rotationAngles);
 
         // STEP 3 -------------------------------------------------------------
     }
